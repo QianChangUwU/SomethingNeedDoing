@@ -21,7 +21,7 @@ public class MainWindow : Window
     private bool ClickedHeaderCurrentFrame;
 
     public MainWindow(IMacroScheduler scheduler, MacroEditor macroEditor, HelpTab helpTab, VersionHistoryModal versionHistoryModal, GitMacroManager gitManager)
-        : base($"{P.Name} v{P.Version}###{P.Name}_{nameof(MainWindow)}", ImGuiWindowFlags.NoScrollbar)
+        : base($"{P.Name} v{P.FullVersion}###{P.Name}_{nameof(MainWindow)}", ImGuiWindowFlags.NoScrollbar)
     {
         _helpTab = helpTab;
         _macrosTab = new MacrosTab(scheduler, macroEditor, gitManager);

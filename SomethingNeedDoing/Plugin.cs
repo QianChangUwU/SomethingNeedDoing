@@ -16,6 +16,7 @@ public partial class Plugin : IAsyncDalamudPlugin
     internal static Plugin P { get; private set; } = null!;
     internal static Config C { get; private set; } = null!;
     internal string Version => Svc.PluginInterface.Manifest.AssemblyVersion.ToString(2);
+    internal string FullVersion => Svc.PluginInterface.Manifest.AssemblyVersion.ToString();
 
     private readonly IDalamudPluginInterface _pluginInterface;
     private IHost _host = null!;
