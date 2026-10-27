@@ -1,4 +1,4 @@
-﻿using Dalamud.Interface;
+using Dalamud.Interface;
 using Dalamud.Interface.Colors;
 using Dalamud.Interface.Utility.Raii;
 using ECommons.ImGuiMethods;
@@ -17,7 +17,7 @@ public partial class HelpLuaTab
     public void DrawTab()
     {
         using var child = ImRaii.Child(nameof(HelpLuaTab));
-        ImGuiUtils.Section("Lua Scripting", () => ImGui.TextWrapped($"Below are all of the functions and properties provided by the framework. Click any to copy the full call path to clipboard. Hover any function to learn more about it."));
+        ImGuiUtils.Section("Lua 脚本", () => ImGui.TextWrapped($"以下是框架提供的全部函数与属性。点击任意项可将完整调用路径复制到剪贴板，悬停可查看详细说明。"));
 
         foreach (var module in _luaDocs.GetModules().OrderBy(m => m.Key))
         {
@@ -121,7 +121,7 @@ public partial class HelpLuaTab
         {
             if (!string.IsNullOrEmpty(ex))
             {
-                ImGui.TextColored(ImGuiColors.DalamudGrey, "Example:");
+                ImGui.TextColored(ImGuiColors.DalamudGrey, "示例:");
                 ImGuiEx.TextWrapped(ImGuiColors.DalamudYellow, ex);
             }
         }

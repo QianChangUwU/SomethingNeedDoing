@@ -19,7 +19,7 @@ public class StatusWindow : Window
     private bool _showTriggerEvents;
     private readonly Dictionary<string, bool> _parentCollapsedStates = [];
 
-    public StatusWindow(IMacroScheduler scheduler, MacroHierarchyManager macroHierarchy, TriggerEventManager triggerEventManager) : base($"{P.Name} - Macro Status###{P.Name}_{nameof(StatusWindow)}", ImGuiWindowFlags.NoScrollbar)
+    public StatusWindow(IMacroScheduler scheduler, MacroHierarchyManager macroHierarchy, TriggerEventManager triggerEventManager) : base($"{P.Name} - 宏状态###{P.Name}_{nameof(StatusWindow)}", ImGuiWindowFlags.NoScrollbar)
     {
         _scheduler = scheduler;
         _macroHierarchy = macroHierarchy;
@@ -36,7 +36,7 @@ public class StatusWindow : Window
                 _minimised = !_minimised;
                 _minimiseBtn!.Icon = _minimised ? FontAwesomeIcon.WindowMaximize : FontAwesomeIcon.Minus;
             },
-            ShowTooltip = () => { using var _ = ImRaii.Tooltip(); ImGuiEx.Text(_minimised ? "Show All Macros" : "Show Running Macros Only"); },
+            ShowTooltip = () => { using var _ = ImRaii.Tooltip(); ImGuiEx.Text(_minimised ? "显示所有宏" : "仅显示运行中的宏"); },
             AvailableClickthrough = true,
         };
         TitleBarButtons.Add(_minimiseBtn);
@@ -44,13 +44,13 @@ public class StatusWindow : Window
 
     public override void Draw()
     {
-        if (ImGui.Button(_showTriggerEvents ? "Hide Trigger Events" : "Show Trigger Events"))
+        if (ImGui.Button(_showTriggerEvents ? "隐藏触发事件" : "显示触发事件"))
             _showTriggerEvents = !_showTriggerEvents;
 
         ImGui.SameLine();
         ImGui.TextColored(ImGuiColors.DalamudGrey, "|");
         ImGui.SameLine();
-        ImGui.TextColored(ImGuiColors.DalamudGrey, "Macro Status");
+        ImGui.TextColored(ImGuiColors.DalamudGrey, "宏状态");
 
         ImGui.Separator();
 
@@ -119,17 +119,17 @@ public class StatusWindow : Window
     {
         if (macro.State == MacroState.Paused)
         {
-            if (ImGuiUtils.IconButton(FontAwesomeIcon.Play, "Resume"))
+            if (ImGuiUtils.IconButton(FontAwesomeIcon.Play, "继续"))
                 _scheduler.ResumeMacro(macro.Id);
         }
         else
         {
-            if (ImGuiUtils.IconButton(FontAwesomeIcon.Pause, "Pause"))
+            if (ImGuiUtils.IconButton(FontAwesomeIcon.Pause, "暂停"))
                 _scheduler.PauseMacro(macro.Id);
         }
 
         ImGui.SameLine();
-        if (ImGuiUtils.IconButton(FontAwesomeIcon.Stop, "Stop"))
+        if (ImGuiUtils.IconButton(FontAwesomeIcon.Stop, "停止"))
             _scheduler.StopMacro(macro.Id);
     }
 
@@ -145,13 +145,13 @@ public class StatusWindow : Window
 
     private void DrawTriggerEventsSection()
     {
-        ImGuiEx.Text(ImGuiColors.DalamudOrange, "Registered Trigger Events");
+        ImGuiEx.Text(ImGuiColors.DalamudOrange, "已注册的触发事件");
         ImGui.Spacing();
 
         var triggerEvents = _triggerEventManager.EventHandlers;
         if (triggerEvents.Count == 0)
         {
-            ImGui.TextColored(ImGuiColors.DalamudGrey, "No trigger events registered");
+            ImGui.TextColored(ImGuiColors.DalamudGrey, "没有已注册的触发事件");
             return;
         }
 

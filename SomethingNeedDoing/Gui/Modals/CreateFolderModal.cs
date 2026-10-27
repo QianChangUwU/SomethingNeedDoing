@@ -1,4 +1,4 @@
-﻿using Dalamud.Interface.Utility.Raii;
+using Dalamud.Interface.Utility.Raii;
 using ECommons.ImGuiMethods;
 
 namespace SomethingNeedDoing.Gui.Modals;
@@ -8,12 +8,12 @@ public static class CreateFolderModal
     private static Vector2 Size = new(400, 200);
     private static bool IsOpen = false;
 
-    private static string _newFolderName = "New Folder";
+    private static string _newFolderName = "新建文件夹";
 
     public static void Open()
     {
         IsOpen = true;
-        _newFolderName = "New Folder";
+        _newFolderName = "新建文件夹";
     }
 
     public static void Close()
@@ -26,23 +26,23 @@ public static class CreateFolderModal
     {
         if (!IsOpen) return;
 
-        ImGui.OpenPopup($"CreateFolderPopup##{nameof(CreateFolderModal)}");
+        ImGui.OpenPopup($"创建文件夹##{nameof(CreateFolderModal)}");
 
         ImGui.SetNextWindowPos(ImGui.GetMainViewport().GetCenter(), ImGuiCond.Appearing, new Vector2(0.5f, 0.5f));
         ImGui.SetNextWindowSize(Size);
 
         using var style = ImRaii.PushStyle(ImGuiStyleVar.WindowPadding, new Vector2(15, 15));
-        using var popup = ImRaii.PopupModal($"CreateFolderPopup##{nameof(CreateFolderModal)}", ref IsOpen, ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoSavedSettings | ImGuiWindowFlags.NoTitleBar);
+        using var popup = ImRaii.PopupModal($"创建文件夹##{nameof(CreateFolderModal)}", ref IsOpen, ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoSavedSettings | ImGuiWindowFlags.NoTitleBar);
         if (!popup) return;
 
         ImGuiEx.Icon(FontAwesomeHelper.IconFolder);
         ImGui.SameLine();
-        ImGui.Text("Create New Folder");
+        ImGui.Text("创建新文件夹");
         ImGui.Separator();
         ImGui.Spacing();
 
         ImGui.AlignTextToFramePadding();
-        ImGui.Text("Name:");
+        ImGui.Text("名称:");
 
         ImGui.SameLine();
         ImGuiUtils.SetFocusIfAppearing();
@@ -52,7 +52,7 @@ public static class CreateFolderModal
         ImGui.Spacing();
         ImGui.Spacing();
 
-        ImGuiUtils.CenteredButtons(("Create", () =>
+        ImGuiUtils.CenteredButtons(("创建", () =>
         {
             var folderExists = false;
             foreach (var macro in C.Macros)
@@ -69,8 +69,8 @@ public static class CreateFolderModal
                 // Create a dummy macro in the folder to ensure it exists (TODO: find a way around this?)
                 var dummyMacro = new ConfigMacro
                 {
-                    Name = C.GetUniqueMacroName($"{_newFolderName} Template"),
-                    Content = "// Add your macro commands here",
+                    Name = C.GetUniqueMacroName($"{_newFolderName} 模板"),
+                    Content = "// 在此处添加宏命令",
                     Type = MacroType.Native,
                     FolderPath = _newFolderName
                 };
@@ -80,6 +80,6 @@ public static class CreateFolderModal
                 Close();
             }
         }
-        ), ("Cancel", Close));
+        ), ("取消", Close));
     }
 }

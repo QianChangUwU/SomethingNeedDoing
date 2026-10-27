@@ -29,22 +29,22 @@ public static class RenameFolderModal
     {
         if (!IsOpen) return;
 
-        ImGui.OpenPopup($"RenameFolderPopup##{nameof(RenameFolderModal)}");
+        ImGui.OpenPopup($"重命名文件夹##{nameof(RenameFolderModal)}");
 
         ImGui.SetNextWindowPos(ImGui.GetMainViewport().GetCenter(), ImGuiCond.Appearing, new Vector2(0.5f, 0.5f));
         ImGui.SetNextWindowSize(Size);
 
         using var style = ImRaii.PushStyle(ImGuiStyleVar.WindowPadding, new Vector2(15, 15));
-        using var popup = ImRaii.PopupModal($"RenameFolderPopup##{nameof(RenameFolderModal)}", ref IsOpen, ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoSavedSettings | ImGuiWindowFlags.NoTitleBar);
+        using var popup = ImRaii.PopupModal($"重命名文件夹##{nameof(RenameFolderModal)}", ref IsOpen, ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoSavedSettings | ImGuiWindowFlags.NoTitleBar);
         if (!popup) return;
 
         ImGuiEx.Icon(FontAwesomeHelper.IconRename);
         ImGui.SameLine();
-        ImGui.Text("Rename Folder");
+        ImGui.Text("重命名文件夹");
         ImGui.Separator();
         ImGui.Spacing();
 
-        ImGui.Text("Enter new folder name:");
+        ImGui.Text("输入新的文件夹名称:");
         ImGui.SetNextItemWidth(-1);
         ImGuiUtils.SetFocusIfAppearing();
 
@@ -61,13 +61,13 @@ public static class RenameFolderModal
         if (!string.IsNullOrEmpty(_renameFolderBuffer) && C.GetFolderPaths().Any(f => f == _renameFolderBuffer))
         {
             invalid = true;
-            ImGuiEx.Text(ImGuiColors.DalamudRed, $"Folder name '{_renameFolderBuffer}' already exists.");
+            ImGuiEx.Text(ImGuiColors.DalamudRed, $"文件夹名称 '{_renameFolderBuffer}' 已存在");
         }
 
         var confirmed = false;
         using (ImRaii.Disabled(invalid))
         using (ImRaii.PushColor(ImGuiCol.Button, new Vector4(0.3f, 0.5f, 0.3f, 1.0f)).Push(ImGuiCol.ButtonHovered, new Vector4(0.4f, 0.6f, 0.4f, 1.0f)))
-            confirmed = ImGui.Button("Rename", new Vector2(150, 0)) || enterPressed;
+            confirmed = ImGui.Button("重命名", new Vector2(150, 0)) || enterPressed;
 
         if (confirmed && !string.IsNullOrWhiteSpace(_renameFolderBuffer))
         {
@@ -78,14 +78,14 @@ public static class RenameFolderModal
             }
             catch (Exception ex)
             {
-                FrameworkLogger.Error(ex, "Error renaming folder");
+                FrameworkLogger.Error(ex, "重命名文件夹时出错");
             }
         }
 
         ImGui.SameLine();
 
         using (ImRaii.PushColor(ImGuiCol.Button, new Vector4(0.5f, 0.3f, 0.3f, 1.0f)).Push(ImGuiCol.ButtonHovered, new Vector4(0.6f, 0.4f, 0.4f, 1.0f)))
-            if (ImGui.Button("Cancel", new Vector2(150, 0)) || (ImGui.IsKeyPressed(ImGuiKey.Escape) && ImGui.IsWindowFocused()))
+            if (ImGui.Button("取消", new Vector2(150, 0)) || (ImGui.IsKeyPressed(ImGuiKey.Escape) && ImGui.IsWindowFocused()))
                 Close();
     }
 }

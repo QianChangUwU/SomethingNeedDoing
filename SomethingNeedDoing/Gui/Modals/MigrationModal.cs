@@ -1,4 +1,4 @@
-﻿using Dalamud.Interface.Colors;
+using Dalamud.Interface.Colors;
 using Dalamud.Interface.Utility.Raii;
 using ECommons.Configuration;
 using ECommons.ImGuiMethods;
@@ -38,29 +38,29 @@ public static class MigrationModal
     {
         if (!IsOpen) return;
 
-        ImGui.OpenPopup($"MigrationPopup##{nameof(MigrationModal)}");
+        ImGui.OpenPopup($"迁移##{nameof(MigrationModal)}");
 
         ImGui.SetNextWindowPos(ImGui.GetMainViewport().GetCenter(), ImGuiCond.Appearing, new Vector2(0.5f, 0.5f));
         ImGui.SetNextWindowSize(Size);
 
         using var style = ImRaii.PushStyle(ImGuiStyleVar.WindowPadding, new Vector2(15, 15));
-        using var popup = ImRaii.PopupModal($"MigrationPopup##{nameof(MigrationModal)}", ref IsOpen, ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoSavedSettings | ImGuiWindowFlags.NoTitleBar);
+        using var popup = ImRaii.PopupModal($"迁移##{nameof(MigrationModal)}", ref IsOpen, ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoSavedSettings | ImGuiWindowFlags.NoTitleBar);
         if (!popup) return;
 
         if (!migrationValid)
         {
-            ImGuiEx.Text(ImGuiColors.DalamudRed, "Migration Preview Failed");
+            ImGuiEx.Text(ImGuiColors.DalamudRed, "迁移预览失败");
 
             using (var errorBox = ImRaii.Child("ErrorBox", new Vector2(400, 100), false))
                 ImGui.TextWrapped(errorMessage);
 
-            ImGuiUtils.CenteredButtons(("Close", Close));
+            ImGuiUtils.CenteredButtons(("关闭", Close));
 
             return;
         }
 
-        ImGui.TextColored(ImGuiColors.DalamudViolet, "Import Macros");
-        ImGui.TextUnformatted("Review the macros that will be imported from the old configuration.");
+        ImGui.TextColored(ImGuiColors.DalamudViolet, "导入宏");
+        ImGui.TextUnformatted("请确认将要从旧配置中导入的宏");
         ImGui.Separator();
         ImGui.Spacing();
 
@@ -70,7 +70,7 @@ public static class MigrationModal
         //using (ImRaii.PushStyle(ImGuiStyleVar.ButtonTextAlign, new Vector2(0, 0.5f)))
         {
             var buttonHeight = ImGui.GetFrameHeight() * 1.5f;
-            if (ImGui.Button("Select All New Macros", new Vector2(-1, buttonHeight)))
+            if (ImGui.Button("全选", new Vector2(-1, buttonHeight)))
             {
                 selectAllNewMacros = !selectAllNewMacros;
                 var keys = newMacros.Keys.ToList();
@@ -83,7 +83,7 @@ public static class MigrationModal
         }
         ImGui.Separator();
 
-        using var child = ImRaii.Child("MacrosList", new Vector2(-1, _listHeight), true);
+        using var child = ImRaii.Child("宏列表", new Vector2(-1, _listHeight), true);
         if (child)
         {
             foreach (var (name, (macro, selected)) in newMacros)
@@ -96,13 +96,13 @@ public static class MigrationModal
 
                 ImGui.SameLine();
 
-                using (var macroChild = ImRaii.Child($"Macro##{name}", new Vector2(-1, ImGui.GetTextLineHeight() + ImGui.GetStyle().FramePadding.Y * 2), false))
+                using (var macroChild = ImRaii.Child($"宏##{name}", new Vector2(-1, ImGui.GetTextLineHeight() + ImGui.GetStyle().FramePadding.Y * 2), false))
                 {
                     if (macroChild)
                     {
                         ImGuiEx.TextV($"{name} ({macro.Type})");
                         ImGui.SameLine();
-                        ImGuiEx.TextV(ImGuiColors.DalamudGrey, $"in {macro.FolderPath}");
+                        ImGuiEx.TextV(ImGuiColors.DalamudGrey, $"位于 {macro.FolderPath}");
                     }
                 }
                 if (ImGui.IsItemHovered() && ImGui.IsMouseDoubleClicked(ImGuiMouseButton.Left))
@@ -112,17 +112,17 @@ public static class MigrationModal
                 {
                     ImGui.Indent(20);
 
-                    ImGui.TextUnformatted("Content:");
-                    using (ImRaii.Child($"Content##{name}", new Vector2(-1, 100), false))
+                    ImGui.TextUnformatted("内容:");
+                    using (ImRaii.Child($"内容##{name}", new Vector2(-1, 100), false))
                         ImGui.TextWrapped(macro.Content);
 
                     ImGui.Spacing();
-                    ImGui.TextUnformatted("Settings:");
-                    ImGui.BulletText($"Crafting Loop: {macro.Metadata.CraftingLoop}");
+                    ImGui.TextUnformatted("设置:");
+                    ImGui.BulletText($"制作循环: {macro.Metadata.CraftingLoop}");
                     if (macro.Metadata.CraftingLoop)
-                        ImGui.BulletText($"Loop Count: {macro.Metadata.CraftLoopCount}");
+                        ImGui.BulletText($"循环次数: {macro.Metadata.CraftLoopCount}");
                     if (macro.Metadata.TriggerEvents.Count > 0)
-                        ImGui.BulletText($"Trigger Events: {string.Join(", ", macro.Metadata.TriggerEvents)}");
+                        ImGui.BulletText($"触发事件: {string.Join(", ", macro.Metadata.TriggerEvents)}");
 
                     ImGui.Unindent(20);
                 }
@@ -134,7 +134,7 @@ public static class MigrationModal
         child.Dispose();
         ImGui.Spacing();
 
-        ImGuiUtils.CenteredButtons(("Import Selected Macros", () => { ApplySelectedChanges(); Close(); }), ("Cancel", Close));
+        ImGuiUtils.CenteredButtons(("导入选中的宏", () => { ApplySelectedChanges(); Close(); }), ("取消", Close));
     }
 
     private static float CalculateRequiredHeight()
@@ -203,7 +203,7 @@ public static class MigrationModal
                 }
                 catch (JsonReaderException)
                 {
-                    FrameworkLogger.Warning("Failed to parse clipboard content as JSON");
+                    FrameworkLogger.Warning("无法解析剪贴板内容为JSON");
                 }
             }
 
@@ -215,12 +215,12 @@ public static class MigrationModal
                 {
                     try
                     {
-                        FrameworkLogger.Info($"Reading config from {configPath}");
+                        FrameworkLogger.Info($"从 {configPath} 读取配置");
                         oldConfig = JsonConvert.DeserializeObject<dynamic>(File.ReadAllText(configPath));
                     }
                     catch (JsonReaderException)
                     {
-                        FrameworkLogger.Warning("Failed to parse config file as JSON");
+                        FrameworkLogger.Warning("无法解析配置文件为JSON");
                     }
                 }
             }
@@ -228,27 +228,27 @@ public static class MigrationModal
             if (oldConfig == null)
             {
                 migrationValid = false;
-                errorMessage = "No valid configuration found in clipboard or config file";
+                errorMessage = "在剪贴板或配置文件中未找到有效配置";
                 return;
             }
 
-            FrameworkLogger.Info($"Old config type: {oldConfig.GetType().Name}");
+            FrameworkLogger.Info($"旧配置类型: {oldConfig.GetType().Name}");
 
             if (oldConfig.RootFolder != null)
                 PreviewMacrosFromOldStructure(oldConfig.RootFolder);
             else
-                FrameworkLogger.Warning("No macros found in old config");
+                FrameworkLogger.Warning("旧配置中未找到宏");
 
-            FrameworkLogger.Info($"Migration preview summary:");
-            FrameworkLogger.Info($"- New macros: {newMacros.Count}");
+            FrameworkLogger.Info($"迁移预览摘要:");
+            FrameworkLogger.Info($"- 新宏数量: {newMacros.Count}");
 
             migrationValid = true;
         }
         catch (Exception ex)
         {
             migrationValid = false;
-            errorMessage = $"Error previewing migration: {ex.Message}";
-            FrameworkLogger.Error(ex, "Failed to preview migration");
+            errorMessage = $"预览迁移时出错: {ex.Message}";
+            FrameworkLogger.Error(ex, "预览迁移失败");
         }
     }
 
@@ -260,17 +260,17 @@ public static class MigrationModal
             if (rootFolder.Name != null)
             {
                 rootFolderName = rootFolder.Name.ToString();
-                FrameworkLogger.Info($"Root folder name: {rootFolderName}");
+                FrameworkLogger.Info($"根文件夹名称: {rootFolderName}");
             }
             else
             {
-                FrameworkLogger.Warning("Root folder has no name, using default");
+                FrameworkLogger.Warning("根文件夹无名称，使用默认值");
                 rootFolderName = ConfigMacro.Root;
             }
         }
         catch (Exception ex)
         {
-            FrameworkLogger.Error(ex, "Error determining root folder name");
+            FrameworkLogger.Error(ex, "确定根文件夹名称时出错");
             rootFolderName = ConfigMacro.Root;
         }
 
@@ -278,14 +278,14 @@ public static class MigrationModal
         {
             if (folder == null) return;
 
-            FrameworkLogger.Info($"Traversing folder: {currentPath}");
+            FrameworkLogger.Info($"遍历文件夹: {currentPath}");
 
             try
             {
                 var children = folder.Children;
                 if (children == null)
                 {
-                    FrameworkLogger.Warning($"No Children property found in folder: {currentPath}");
+                    FrameworkLogger.Warning($"文件夹中未找到子项属性: {currentPath}");
                     return;
                 }
 
@@ -298,7 +298,7 @@ public static class MigrationModal
                         {
                             var macro = new ConfigMacro
                             {
-                                Name = node.Name ?? "Unknown",
+                                Name = node.Name ?? "未知",
                                 Type = node.Language?.ToString() == "1" ? MacroType.Lua : MacroType.Native,
                                 Content = node.Contents.ToString(),
                                 FolderPath = isRoot ? "/" : currentPath,
@@ -311,7 +311,7 @@ public static class MigrationModal
                                 }
                             };
 
-                            FrameworkLogger.Info($"Adding macro: {macro.Name} in {macro.FolderPath}");
+                            FrameworkLogger.Info($"添加宏: {macro.Name} 位于 {macro.FolderPath}");
                             newMacros[macro.Name] = (macro, true);
                         }
                         else if (node.Name != null)
@@ -331,13 +331,13 @@ public static class MigrationModal
                     }
                     catch (Exception ex)
                     {
-                        FrameworkLogger.Error(ex, $"Error processing node in folder {currentPath}");
+                        FrameworkLogger.Error(ex, $"处理文件夹 {currentPath} 中的节点时出错");
                     }
                 }
             }
             catch (Exception ex)
             {
-                FrameworkLogger.Error(ex, $"Error traversing folder {currentPath}");
+                FrameworkLogger.Error(ex, $"遍历文件夹 {currentPath} 时出错");
             }
         }
 
@@ -347,7 +347,7 @@ public static class MigrationModal
         }
         catch (Exception ex)
         {
-            FrameworkLogger.Error(ex, "Failed to traverse folder structure");
+            FrameworkLogger.Error(ex, "遍历文件夹结构失败");
         }
     }
 
@@ -359,11 +359,11 @@ public static class MigrationModal
                 C.Macros.Add(macro);
 
             C.Save();
-            Svc.Chat.Print("Selected macros imported successfully!");
+            Svc.Chat.Print("选中的宏已成功导入!");
         }
         catch (Exception ex)
         {
-            Svc.Chat.PrintErrorMsg($"Failed to import macros: {ex.Message}");
+            Svc.Chat.PrintErrorMsg($"导入宏失败: {ex.Message}");
         }
     }
 

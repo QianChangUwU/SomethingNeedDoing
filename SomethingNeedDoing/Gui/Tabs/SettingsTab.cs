@@ -1,4 +1,4 @@
-﻿using Dalamud.Interface.Colors;
+using Dalamud.Interface.Colors;
 using Dalamud.Interface.Utility.Raii;
 using ECommons.ImGuiMethods;
 using SomethingNeedDoing.Gui.Modals;
@@ -11,29 +11,29 @@ public static class SettingsTab
     {
         using var _ = ImRaii.Child("SettingsTab", Vector2.Create(-1), false);
 
-        ImGuiUtils.Section("General Settings", () =>
+        ImGuiUtils.Section("常规设置", () =>
         {
             var chatChannel = C.ChatType;
-            if (ImGuiEx.EnumCombo("ChatType", ref chatChannel))
+            if (ImGuiEx.EnumCombo("输出频道", ref chatChannel))
             {
                 C.ChatType = chatChannel;
                 C.Save();
             }
 
             var errorChannel = C.ErrorChatType;
-            if (ImGuiEx.EnumCombo("ErrorChatType", ref errorChannel))
+            if (ImGuiEx.EnumCombo("报错输出频道", ref errorChannel))
             {
                 C.ErrorChatType = errorChannel;
                 C.Save();
             }
 
             var propagatePause = C.PropagateControlsToChildren;
-            if (ImGui.Checkbox("Propagate Controls to Child Macros", ref propagatePause))
+            if (ImGui.Checkbox("将控制应用到子宏", ref propagatePause))
             {
                 C.PropagateControlsToChildren = propagatePause;
                 C.Save();
             }
-            ImGuiEx.Tooltip("When enabled, pausing, resuming and stopping macros will also pause, resume and stop the child macros.");
+            ImGuiEx.Tooltip("启用时，暂停、继续和停止宏操作也会影响其子宏。");
 
             var autoOpenStatusWindow = C.AutoOpenStatusWindow;
             if (ImGui.Checkbox("Auto-open Status Window on Script Start", ref autoOpenStatusWindow))
@@ -44,45 +44,45 @@ public static class SettingsTab
             ImGuiEx.Tooltip("When enabled, the macro status window will automatically open when a script starts running.");
         });
 
-        ImGuiUtils.Section("Crafting Settings", () =>
+        ImGuiUtils.Section("制作设置", () =>
         {
             var craftSkip = C.CraftSkip;
-            if (ImGui.Checkbox("Skip craft actions when not crafting", ref craftSkip))
+            if (ImGui.Checkbox("非制作时跳过制作技能", ref craftSkip))
             {
                 C.CraftSkip = craftSkip;
                 C.Save();
             }
 
             var smartWait = C.SmartWait;
-            if (ImGui.Checkbox("Smart wait for crafting actions", ref smartWait))
+            if (ImGui.Checkbox("智能等待制作技能", ref smartWait))
             {
                 C.SmartWait = smartWait;
                 C.Save();
             }
 
             var qualitySkip = C.QualitySkip;
-            if (ImGui.Checkbox("Skip quality increasing actions when at 100% HQ chance", ref qualitySkip))
+            if (ImGui.Checkbox("HQ率100%时跳过加工技能", ref qualitySkip))
             {
                 C.QualitySkip = qualitySkip;
                 C.Save();
             }
 
             var loopTotal = C.LoopTotal;
-            if (ImGui.Checkbox("Count /loop number as total iterations", ref loopTotal))
+            if (ImGui.Checkbox("将/loop计数视为总迭代次数", ref loopTotal))
             {
                 C.LoopTotal = loopTotal;
                 C.Save();
             }
 
             var loopEcho = C.LoopEcho;
-            if (ImGui.Checkbox("Always echo /loop commands", ref loopEcho))
+            if (ImGui.Checkbox("始终回显/loop命令", ref loopEcho))
             {
                 C.LoopEcho = loopEcho;
                 C.Save();
             }
 
             var useCraftLoopTemplate = C.UseCraftLoopTemplate;
-            if (ImGui.Checkbox("Use CraftLoop template", ref useCraftLoopTemplate))
+            if (ImGui.Checkbox("使用CraftLoop模板", ref useCraftLoopTemplate))
             {
                 C.UseCraftLoopTemplate = useCraftLoopTemplate;
                 C.Save();
@@ -91,21 +91,21 @@ public static class SettingsTab
             if (useCraftLoopTemplate)
             {
                 var craftLoopTemplate = C.CraftLoopTemplate;
-                if (ImGui.InputTextMultiline("CraftLoop Template", ref craftLoopTemplate, 1000, new Vector2(0, 100)))
+                if (ImGui.InputTextMultiline("CraftLoop模板", ref craftLoopTemplate, 1000, new Vector2(0, 100)))
                 {
                     C.CraftLoopTemplate = craftLoopTemplate;
                     C.Save();
                 }
 
                 var craftLoopFromRecipeNote = C.CraftLoopFromRecipeNote;
-                if (ImGui.Checkbox("Start crafting loops from recipe note window", ref craftLoopFromRecipeNote))
+                if (ImGui.Checkbox("从制作笔记窗口开始制作循环", ref craftLoopFromRecipeNote))
                 {
                     C.CraftLoopFromRecipeNote = craftLoopFromRecipeNote;
                     C.Save();
                 }
 
                 var craftLoopMaxWait = C.CraftLoopMaxWait;
-                if (ImGui.SliderInt("CraftLoop maxwait value", ref craftLoopMaxWait, 1, 10))
+                if (ImGui.SliderInt("CraftLoop最大等待值", ref craftLoopMaxWait, 1, 10))
                 {
                     C.CraftLoopMaxWait = craftLoopMaxWait;
                     C.Save();
@@ -120,25 +120,25 @@ public static class SettingsTab
             }
         });
 
-        ImGuiUtils.Section("Error Handling", () =>
+        ImGuiUtils.Section("错误处理", () =>
         {
             var stopOnError = C.StopOnError;
-            if (ImGui.Checkbox("Stop on error", ref stopOnError))
+            if (ImGui.Checkbox("出错时停止", ref stopOnError))
             {
                 C.StopOnError = stopOnError;
                 C.Save();
             }
-            ImGuiEx.Tooltip("Only meant for native macros.");
+            ImGuiEx.Tooltip("仅适用于原生宏。");
 
             var maxTimeoutRetries = C.MaxTimeoutRetries;
-            if (ImGui.SliderInt("Max Timeout Retries", ref maxTimeoutRetries, 0, 10))
+            if (ImGui.SliderInt("最大超时重试次数", ref maxTimeoutRetries, 0, 10))
             {
                 C.MaxTimeoutRetries = maxTimeoutRetries;
                 C.Save();
             }
 
             var noisyErrors = C.NoisyErrors;
-            if (ImGui.Checkbox("Noisy Errors", ref noisyErrors))
+            if (ImGui.Checkbox("错误提示音", ref noisyErrors))
             {
                 C.NoisyErrors = noisyErrors;
                 C.Save();
@@ -147,21 +147,21 @@ public static class SettingsTab
             if (noisyErrors)
             {
                 var beepFrequency = C.BeepFrequency;
-                if (ImGui.SliderInt("Beep Frequency", ref beepFrequency, 0, 1000))
+                if (ImGui.SliderInt("提示音频率", ref beepFrequency, 0, 1000))
                 {
                     C.BeepFrequency = beepFrequency;
                     C.Save();
                 }
 
                 var beepDuration = C.BeepDuration;
-                if (ImGui.SliderInt("Beep Duration", ref beepDuration, 0, 1000))
+                if (ImGui.SliderInt("提示音时长", ref beepDuration, 0, 1000))
                 {
                     C.BeepDuration = beepDuration;
                     C.Save();
                 }
 
                 var beepCount = C.BeepCount;
-                if (ImGui.SliderInt("Beep Count", ref beepCount, 0, 10))
+                if (ImGui.SliderInt("提示音次数", ref beepCount, 0, 10))
                 {
                     C.BeepCount = beepCount;
                     C.Save();
@@ -169,9 +169,9 @@ public static class SettingsTab
             }
         });
 
-        ImGuiUtils.Section("Lua Options", () =>
+        ImGuiUtils.Section("Lua选项", () =>
         {
-            ImGui.TextWrapped("Lua require paths (where to look for Lua modules):");
+            ImGui.TextWrapped("Lua require路径 (Lua模块搜索路径):");
 
             var paths = C.LuaRequirePaths.ToArray();
             using (ImRaii.Table("LuaRequirePaths", 2, ImGuiTableFlags.SizingStretchProp))
@@ -185,7 +185,7 @@ public static class SettingsTab
 
                     var isValid = PathHelper.ValidatePath(path);
                     ImGui.TextColored(isValid ? ImGuiColors.HealerGreen : ImGuiColors.DalamudRed, $"Path #{index}");
-                    ImGuiEx.Tooltip(isValid ? "This path is valid." : "This path is invalid.");
+                    ImGuiEx.Tooltip(isValid ? "此路径有效" : "此路径无效");
 
                     ImGui.TableNextColumn();
 
@@ -199,7 +199,7 @@ public static class SettingsTab
                 }
             }
 
-            if (ImGui.Button("Add Path"))
+            if (ImGui.Button("添加路径"))
             {
                 var newPaths = paths.ToList();
                 newPaths.Add(string.Empty);
@@ -208,13 +208,13 @@ public static class SettingsTab
             }
         });
 
-        ImGuiUtils.Section("Legacy Macro Import", () =>
+        ImGuiUtils.Section("旧版宏导入", () =>
         {
-            ImGui.TextWrapped($"Import macros from the old version of {P.Name}. These are not guaranteed to work any more but can be imported as a reference.\n" +
-            "You can copy an old config to clipboard and click the import button, or it will automatically attempt to find the old config file.");
+            ImGui.TextWrapped($"从旧版{P.Name}导入宏。不保证完全兼容，但可作为参考导入。\n" +
+            "可将旧配置复制到剪贴板后点击导入按钮，或自动尝试查找旧配置文件。");
             ImGui.Spacing();
 
-            if (ImGuiUtils.IconButton(FontAwesomeHelper.IconImport, "Import"))
+            if (ImGuiUtils.IconButton(FontAwesomeHelper.IconImport, "导入"))
                 MigrationModal.Open(ImGui.GetClipboardText());
         });
     }

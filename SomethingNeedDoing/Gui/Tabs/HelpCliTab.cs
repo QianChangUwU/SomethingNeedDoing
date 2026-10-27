@@ -1,4 +1,4 @@
-﻿using Dalamud.Interface;
+using Dalamud.Interface;
 using Dalamud.Interface.Utility;
 using Dalamud.Interface.Utility.Raii;
 using SomethingNeedDoing.Services;
@@ -13,19 +13,19 @@ public partial class HelpCliTab
     public void DrawTab()
     {
         using var child = ImRaii.Child(nameof(HelpCliTab));
-        ImGuiUtils.Section("Command Line Interface", () => ImGui.TextWrapped("The following commands can be used in chat or your macro text."));
+        ImGuiUtils.Section("命令行界面", () => ImGui.TextWrapped("以下命令可在聊天栏或宏文本中使用。"));
 
-        ImGuiUtils.Section("Main Command", () => ImGui.TextUnformatted(_cmds.MainCommand), contentFont: UiBuilder.MonoFont);
+        ImGuiUtils.Section("主命令", () => ImGui.TextUnformatted(_cmds.MainCommand), contentFont: UiBuilder.MonoFont);
 
-        ImGuiUtils.Section("Aliases", () => _cmds.Aliases.Each(a => ImGui.TextUnformatted(a)), contentFont: UiBuilder.MonoFont);
+        ImGuiUtils.Section("别名", () => _cmds.Aliases.Each(a => ImGui.TextUnformatted(a)), contentFont: UiBuilder.MonoFont);
 
-        ImGuiUtils.Section("Commands", () =>
+        ImGuiUtils.Section("命令", () =>
         {
             using var table = ImRaii.Table("CommandsTable", 2, ImGuiTableFlags.BordersOuter | ImGuiTableFlags.BordersInner);
             if (!table) return;
 
-            ImGui.TableSetupColumn("Command", ImGuiTableColumnFlags.WidthFixed, 180 * ImGuiHelpers.GlobalScale);
-            ImGui.TableSetupColumn("Description", ImGuiTableColumnFlags.WidthStretch);
+            ImGui.TableSetupColumn("命令", ImGuiTableColumnFlags.WidthFixed, 180 * ImGuiHelpers.GlobalScale);
+            ImGui.TableSetupColumn("说明", ImGuiTableColumnFlags.WidthStretch);
             ImGui.TableHeadersRow();
 
             foreach (var (name, desc) in _cmds.GetCommandData())

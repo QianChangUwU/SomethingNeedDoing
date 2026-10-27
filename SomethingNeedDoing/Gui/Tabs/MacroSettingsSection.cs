@@ -52,13 +52,13 @@ public partial class MacroSettingsSection
             DrawDependencies(selectedMacro);
         }
         else
-            ImGui.TextColored(ImGuiColors.DalamudGrey, "Select a macro to view and edit its settings");
+            ImGui.TextColored(ImGuiColors.DalamudGrey, "选择一个宏以查看和编辑其设置");
     }
 
     private void DrawMacroConfig(ConfigMacro selectedMacro)
     {
         if (selectedMacro.Metadata.Configs.Count == 0) return;
-        ImGuiUtils.Section("Macro Configuration", () =>
+        ImGuiUtils.Section("宏配置", () =>
         {
             var sectionOrder = new List<string>();
             var grouped = new Dictionary<string, List<KeyValuePair<string, MacroConfigItem>>>();
@@ -104,13 +104,13 @@ public partial class MacroSettingsSection
         ImGui.SameLine(ImGui.GetContentRegionAvail().X - 80);
         using (ImRaii.Disabled(configValue.IsValueDefault()))
         {
-            if (ImGui.Button("Reset", new Vector2(70, 0)))
+            if (ImGui.Button("重置", new Vector2(70, 0)))
             {
                 configValue.Value = configValue.DefaultValue;
                 C.Save();
             }
         }
-        ImGuiEx.Tooltip($"Reset to default value: {configValue.DefaultValue}");
+        ImGuiEx.Tooltip($"重置为默认值: {configValue.DefaultValue}");
         ImGui.Spacing();
 
         var valueChanged = false;
@@ -133,7 +133,7 @@ public partial class MacroSettingsSection
                 if (configValue.MinValue != null || configValue.MaxValue != null)
                 {
                     ImGui.SameLine();
-                    ImGui.TextColored(ImGuiColors.DalamudGrey, $"Range: {intMin} - {intMax}");
+                    ImGui.TextColored(ImGuiColors.DalamudGrey, $"范围: {intMin} - {intMax}");
                 }
                 break;
 
@@ -154,7 +154,7 @@ public partial class MacroSettingsSection
                 if (configValue.MinValue != null || configValue.MaxValue != null)
                 {
                     ImGui.SameLine();
-                    ImGui.TextColored(ImGuiColors.DalamudGrey, $"Range: {floatMin:F2} - {floatMax:F2}");
+                    ImGui.TextColored(ImGuiColors.DalamudGrey, $"范围: {floatMin:F2} - {floatMax:F2}");
                 }
                 break;
 
@@ -187,7 +187,7 @@ public partial class MacroSettingsSection
                         }
                     }
                     else
-                        ImGui.TextColored(ImGuiColors.DalamudRed, "No choices defined");
+                        ImGui.TextColored(ImGuiColors.DalamudRed, "未定义选项");
                 }
                 else
                 {
@@ -213,7 +213,7 @@ public partial class MacroSettingsSection
                         }
 
                         ImGui.SameLine();
-                        if (ImGui.Button("Remove"))
+                        if (ImGui.Button("移除"))
                         {
                             list.RemoveAt(i);
                             valueChanged = true;
@@ -244,7 +244,7 @@ public partial class MacroSettingsSection
                         }
                     }
                     else
-                        ImGui.TextColored(ImGuiColors.DalamudRed, "No choices defined");
+                        ImGui.TextColored(ImGuiColors.DalamudRed, "未定义选项");
                 }
                 else
                 {
@@ -260,12 +260,12 @@ public partial class MacroSettingsSection
                             var regex = new System.Text.RegularExpressions.Regex(configValue.ValidationPattern);
                             isValid = regex.IsMatch(stringValue);
                             if (!isValid)
-                                validationMessage = configValue.ValidationMessage ?? "Value does not match pattern";
+                                validationMessage = configValue.ValidationMessage ?? "值不匹配模式";
                         }
                         catch (Exception ex)
                         {
                             isValid = false;
-                            validationMessage = $"Invalid validation pattern: {ex.Message}";
+                            validationMessage = $"验证模式无效: {ex.Message}";
                         }
                     }
 
@@ -286,7 +286,7 @@ public partial class MacroSettingsSection
                         if (!isValid && !string.IsNullOrEmpty(validationMessage))
                             ImGuiEx.Tooltip(validationMessage);
                         else if (isValid)
-                            ImGuiEx.Tooltip("Value matches validation pattern");
+                            ImGuiEx.Tooltip("值匹配验证模式");
                     }
                 }
                 break;
@@ -312,10 +312,10 @@ public partial class MacroSettingsSection
 
     private void DrawGeneralInfo(ConfigMacro selectedMacro)
     {
-        ImGuiUtils.Section("General Information", () =>
+        ImGuiUtils.Section("常规信息", () =>
         {
             ImGui.AlignTextToFramePadding();
-            ImGui.Text("Author:");
+            ImGui.Text("作者:");
             ImGui.SameLine(100);
 
             var author = selectedMacro.Metadata.Author ?? string.Empty;
@@ -327,7 +327,7 @@ public partial class MacroSettingsSection
             }
 
             ImGui.AlignTextToFramePadding();
-            ImGui.Text("Version:");
+            ImGui.Text("版本:");
             ImGui.SameLine(100);
 
             var version = selectedMacro.Metadata.Version ?? string.Empty;
@@ -339,7 +339,7 @@ public partial class MacroSettingsSection
             }
 
             ImGui.AlignTextToFramePadding();
-            ImGui.Text("Description:");
+            ImGui.Text("描述:");
 
             var description = selectedMacro.Metadata.Description ?? string.Empty;
             ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X);
@@ -349,32 +349,32 @@ public partial class MacroSettingsSection
                 C.Save();
             }
 
-            if (ImGui.Button("Write Metadata to Content"))
+            if (ImGui.Button("将元数据写入宏"))
             {
                 if (_metadataParser.WriteMetadata(selectedMacro, OnContentUpdated))
-                    FrameworkLogger.Debug($"Wrote metadata to macro {selectedMacro.Name}");
+                    FrameworkLogger.Debug($"已将元数据写入宏 {selectedMacro.Name}");
                 else
-                    FrameworkLogger.Error($"Failed to write metadata to macro {selectedMacro.Name}");
+                    FrameworkLogger.Error($"写入宏 {selectedMacro.Name} 的元数据失败");
             }
-            ImGuiEx.Tooltip("Writes the current metadata (author, version, description, dependencies, triggers) to the macro content. If metadata already exists, it will be updated.");
+            ImGuiEx.Tooltip("将当前元数据（作者、版本、描述、依赖项、触发器）写入宏内容。如果元数据已存在，将被更新。");
 
             ImGui.SameLine();
 
-            if (ImGui.Button("Read Metadata from Content"))
+            if (ImGui.Button("从宏中读取元数据"))
             {
                 selectedMacro.Metadata = _metadataParser.ParseMetadata(selectedMacro.Content);
                 C.Save();
             }
-            ImGuiEx.Tooltip("Reads metadata (author, version, description, dependencies, triggers) from the macro content and updates the settings.");
+            ImGuiEx.Tooltip("从宏内容中读取元数据（作者、版本、描述、依赖项、触发器）并更新设置。");
         });
     }
 
     private void DrawGitInfo(ConfigMacro selectedMacro)
     {
-        ImGuiUtils.Section("Git Information", () =>
+        ImGuiUtils.Section("Git 信息", () =>
         {
             ImGui.AlignTextToFramePadding();
-            ImGui.Text("GitHub URL:");
+            ImGui.Text("GitHub 地址:");
             ImGui.SameLine(100);
 
             var repoUrl = selectedMacro.GitInfo.RepositoryUrl;
@@ -384,20 +384,20 @@ public partial class MacroSettingsSection
                 selectedMacro.GitInfo.RepositoryUrl = repoUrl;
                 C.Save();
             }
-            ImGuiEx.Tooltip("Enter a GitHub URL (e.g., https://github.com/owner/repo/blob/branch/path)");
+            ImGuiEx.Tooltip("输入一个 GitHub 地址（例如：https://github.com/owner/repo/blob/branch/path）");
 
             if (selectedMacro.IsGitMacro)
             {
                 ImGui.AlignTextToFramePadding();
                 var autoUpdate = selectedMacro.GitInfo.AutoUpdate;
-                if (ImGui.Checkbox("Auto Update", ref autoUpdate))
+                if (ImGui.Checkbox("自动更新", ref autoUpdate))
                 {
                     selectedMacro.GitInfo.AutoUpdate = autoUpdate;
                     C.Save();
                 }
 
                 var group = new ImGuiEx.EzButtonGroup();
-                group.AddIconWithText(FontAwesomeIcon.Download, "Import", () =>
+                group.AddIconWithText(FontAwesomeIcon.Download, "导入", () =>
                 {
                     if (!string.IsNullOrWhiteSpace(repoUrl))
                     {
@@ -409,14 +409,14 @@ public partial class MacroSettingsSection
                             }
                             catch (Exception ex)
                             {
-                                FrameworkLogger.Error(ex, $"Failed to import macro from {repoUrl}");
+                                FrameworkLogger.Error(ex, $"从 {repoUrl} 导入宏失败");
                             }
                         });
                     }
                 });
-                group.AddIconWithText(FontAwesomeIcon.History, "Version History", () => _versionHistoryModal.Open(selectedMacro));
-                group.AddIconWithText(FontAwesomeIcon.Sync, "Reset Git Info",
-                    () => { selectedMacro.GitInfo = new GitInfo(); C.Save(); }, "Wipes all git information and reverts this macro back to a standard local macro.",
+                group.AddIconWithText(FontAwesomeIcon.History, "版本历史", () => _versionHistoryModal.Open(selectedMacro));
+                group.AddIconWithText(FontAwesomeIcon.Sync, "重置 Git 信息",
+                    () => { selectedMacro.GitInfo = new GitInfo(); C.Save(); }, "清除所有 Git 信息并将此宏恢复为普通本地宏。",
                     new() { ButtonColor = EzColor.Red });
                 group.Draw();
             }
@@ -425,10 +425,10 @@ public partial class MacroSettingsSection
 
     private void DrawCraftLoop(ConfigMacro selectedMacro)
     {
-        ImGuiUtils.Section("CraftLoop Settings", () =>
+        ImGuiUtils.Section("制作循环设置", () =>
         {
             var craftingLoop = selectedMacro.Metadata.CraftingLoop;
-            if (ImGui.Checkbox("Enable Crafting Loop", ref craftingLoop))
+            if (ImGui.Checkbox("启用制作循环", ref craftingLoop))
             {
                 selectedMacro.Metadata.CraftingLoop = craftingLoop;
                 C.Save();
@@ -440,7 +440,7 @@ public partial class MacroSettingsSection
 
                 var loopCount = selectedMacro.Metadata.CraftLoopCount;
                 ImGui.SetNextItemWidth(100);
-                if (ImGui.InputInt("Loop Count", ref loopCount))
+                if (ImGui.InputInt("循环次数", ref loopCount))
                 {
                     if (loopCount < -1)
                         loopCount = -1;
@@ -459,7 +459,7 @@ public partial class MacroSettingsSection
 
     private void DrawTriggers(ConfigMacro selectedMacro)
     {
-        ImGuiUtils.Section("Trigger Events", () =>
+        ImGuiUtils.Section("触发事件", () =>
         {
             var events = new List<TriggerEvent>(selectedMacro.Metadata.TriggerEvents);
             if (ImGuiUtils.EnumCheckboxes(ref events, [TriggerEvent.None]))
@@ -472,7 +472,7 @@ public partial class MacroSettingsSection
                 ImGui.Separator();
                 ImGui.Spacing();
 
-                ImGui.Text("Addon Event Configuration");
+                ImGui.Text("界面事件配置");
                 ImGui.Spacing();
 
                 var addonConfig = selectedMacro.Metadata.AddonEventConfig ?? new AddonEventConfig();
@@ -480,7 +480,7 @@ public partial class MacroSettingsSection
                 var eventType = addonConfig.EventType;
 
                 ImGui.AlignTextToFramePadding();
-                ImGui.Text("Addon Name:");
+                ImGui.Text("界面名称:");
                 ImGui.SameLine(100);
 
                 ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X);
@@ -492,7 +492,7 @@ public partial class MacroSettingsSection
                 }
 
                 ImGui.AlignTextToFramePadding();
-                ImGui.Text("Event Type:");
+                ImGui.Text("事件类型:");
                 ImGui.SameLine(100);
 
                 ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X);
@@ -503,7 +503,7 @@ public partial class MacroSettingsSection
                     C.Save();
                 }
 
-                if (ImGui.Button("Clear Addon Event Config"))
+                if (ImGui.Button("清除界面事件配置"))
                 {
                     selectedMacro.Metadata.AddonEventConfig = null;
                     C.Save();
@@ -514,7 +514,7 @@ public partial class MacroSettingsSection
 
     private void DrawPluginDependencies(ConfigMacro selectedMacro)
     {
-        ImGuiUtils.Section("Plugin Dependencies", () =>
+        ImGuiUtils.Section("插件依赖", () =>
         {
             var installedPlugins = Svc.PluginInterface.InstalledPlugins
                 .Where(p => p.IsLoaded)
@@ -537,7 +537,7 @@ public partial class MacroSettingsSection
             ImGui.Spacing();
 
             if (selectedMacro.Metadata.PluginDependecies.Length == 0)
-                ImGui.TextColored(ImGuiColors.DalamudGrey, "No plugin dependencies configured");
+                ImGui.TextColored(ImGuiColors.DalamudGrey, "未配置插件依赖");
             else
             {
                 foreach (var plugin in selectedMacro.Metadata.PluginDependecies)
@@ -562,7 +562,7 @@ public partial class MacroSettingsSection
 
     private void DrawPluginConflicts(ConfigMacro selectedMacro)
     {
-        ImGuiUtils.Section("Plugin Conflicts", () =>
+        ImGuiUtils.Section("插件冲突", () =>
         {
             ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X);
             if (ImGuiEx.Combo("##DisableablePluginSelector", ref _pluginToDisable, _disableablePluginNames))
@@ -579,7 +579,7 @@ public partial class MacroSettingsSection
             ImGui.Spacing();
 
             if (selectedMacro.Metadata.PluginsToDisable.Length == 0)
-                ImGui.TextColored(ImGuiColors.DalamudGrey, "No plugins configured to disable");
+                ImGui.TextColored(ImGuiColors.DalamudGrey, "未配置要禁用的插件");
             else
             {
                 foreach (var plugin in selectedMacro.Metadata.PluginsToDisable)
@@ -604,10 +604,10 @@ public partial class MacroSettingsSection
 
     private void DrawDependencies(ConfigMacro selectedMacro)
     {
-        ImGuiUtils.Section("Macro Dependencies", () =>
+        ImGuiUtils.Section("宏依赖", () =>
         {
             if (selectedMacro.Metadata.Dependencies.Count == 0)
-                ImGui.TextColored(ImGuiColors.DalamudGrey, "No macro dependencies configured");
+                ImGui.TextColored(ImGuiColors.DalamudGrey, "未配置宏依赖");
             else
             {
                 for (var i = 0; i < selectedMacro.Metadata.Dependencies.Count; i++)
@@ -638,7 +638,7 @@ public partial class MacroSettingsSection
             ImGui.Separator();
             ImGui.Spacing();
 
-            ImGui.Text("Add New Dependency");
+            ImGui.Text("添加新依赖");
             ImGui.Spacing();
 
             ImGuiEx.EnumRadio(ref _dependencyType, true);
@@ -647,7 +647,7 @@ public partial class MacroSettingsSection
 
             if (_dependencyType == DependencyType.Local)
             {
-                ImGui.Text("Local Dependency Type:");
+                ImGui.Text("本地依赖类型:");
                 ImGui.Spacing();
 
                 ImGuiEx.EnumRadio(ref _localDependencyType, true);
@@ -670,9 +670,9 @@ public partial class MacroSettingsSection
                 {
                     ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X);
                     ImGui.InputText("##LocalFilePath", ref _localFilePath, 1000);
-                    ImGuiEx.Tooltip("Enter the full path to a local file");
+                    ImGuiEx.Tooltip("输入本地文件的完整路径");
 
-                    if (ImGui.Button("Add File Dependency"))
+                    if (ImGui.Button("添加文件依赖"))
                     {
                         if (!string.IsNullOrWhiteSpace(_localFilePath))
                         {
@@ -687,9 +687,9 @@ public partial class MacroSettingsSection
             {
                 ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X);
                 ImGui.InputText("##GitUrl", ref _gitUrl, 1000);
-                ImGuiEx.Tooltip("Enter a GitHub URL (e.g., https://github.com/owner/repo or https://github.com/owner/repo/blob/branch/path)");
+                ImGuiEx.Tooltip("输入一个 GitHub 地址（例如：https://github.com/owner/repo 或 https://github.com/owner/repo/blob/branch/path）");
 
-                if (ImGui.Button("Add Dependency"))
+                if (ImGui.Button("添加依赖"))
                 {
                     if (!string.IsNullOrWhiteSpace(_gitUrl))
                     {

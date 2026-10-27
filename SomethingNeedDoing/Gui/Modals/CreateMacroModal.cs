@@ -1,4 +1,4 @@
-﻿using Dalamud.Interface.Utility.Raii;
+using Dalamud.Interface.Utility.Raii;
 using ECommons.ImGuiMethods;
 using SomethingNeedDoing.Managers;
 using System.Threading.Tasks;
@@ -35,22 +35,22 @@ public class CreateMacroModal(GitMacroManager gitManager)
     {
         if (!IsOpen) return;
 
-        ImGui.OpenPopup($"CreateMacroPopup##{nameof(CreateMacroModal)}");
+        ImGui.OpenPopup($"创建宏##{nameof(CreateMacroModal)}");
 
         ImGui.SetNextWindowPos(ImGui.GetMainViewport().GetCenter(), ImGuiCond.Appearing, new Vector2(0.5f, 0.5f));
         ImGui.SetNextWindowSize(Size);
 
         using var style = ImRaii.PushStyle(ImGuiStyleVar.WindowPadding, new Vector2(15, 15));
-        using var popup = ImRaii.PopupModal($"CreateMacroPopup##{nameof(CreateMacroModal)}", ref IsOpen, ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoSavedSettings | ImGuiWindowFlags.NoTitleBar);
+        using var popup = ImRaii.PopupModal($"创建宏##{nameof(CreateMacroModal)}", ref IsOpen, ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoSavedSettings | ImGuiWindowFlags.NoTitleBar);
         if (!popup) return;
 
         ImGuiEx.Icon(FontAwesomeHelper.IconNew);
         ImGui.SameLine();
-        ImGui.Text("Create New Macro");
+        ImGui.Text("创建新宏");
         ImGui.Separator();
 
         ImGui.AlignTextToFramePadding();
-        ImGui.Text("Name:");
+        ImGui.Text("名称:");
 
         ImGui.SameLine();
         ImGuiUtils.SetFocusIfAppearing();
@@ -60,19 +60,19 @@ public class CreateMacroModal(GitMacroManager gitManager)
         ImGui.Spacing();
 
         ImGui.AlignTextToFramePadding();
-        ImGui.Text("Type:");
+        ImGui.Text("类型:");
         ImGui.SameLine();
 
         _newMacroType = ImGuiUtils.EnumRadioButtons(_newMacroType);
 
         ImGui.Spacing();
 
-        ImGuiUtils.Section("Optional: Import from Github", () =>
+        ImGuiUtils.Section("可选：从GitHub导入", () =>
         {
             ImGui.AlignTextToFramePadding();
             ImGui.Text("GitHub URL:");
             ImGui.SameLine();
-            ImGuiEx.Tooltip("Enter a GitHub URL (e.g., https://github.com/owner/repo/blob/branch/path)");
+            ImGuiEx.Tooltip("输入 GitHub URL (例如： https://github.com/owner/repo/blob/branch/path)");
 
             ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X);
             ImGui.InputText("##GitHubUrl", ref _githubUrl, 500);
@@ -88,10 +88,10 @@ public class CreateMacroModal(GitMacroManager gitManager)
         ImGui.Spacing();
 
         if (_isImporting)
-            ImGuiUtils.CenteredButtons(("Importing...", () => { }));
+            ImGuiUtils.CenteredButtons(("导入中...", () => { }));
         else
         {
-            ImGuiUtils.CenteredButtons(("Create", async () =>
+            ImGuiUtils.CenteredButtons(("创建", async () =>
             {
                 if (!string.IsNullOrWhiteSpace(_githubUrl))
                     await ImportFromGitHub();
@@ -111,7 +111,7 @@ public class CreateMacroModal(GitMacroManager gitManager)
                     Close();
                 }
             }
-            ), ("Cancel", Close));
+            ), ("取消", Close));
         }
     }
 
@@ -135,7 +135,7 @@ public class CreateMacroModal(GitMacroManager gitManager)
         }
         catch (Exception ex)
         {
-            _importError = $"Failed to import from GitHub: {ex.Message}";
+            _importError = $"从 GitHub 导入失败: {ex.Message}";
             FrameworkLogger.Error(ex, "Failed to import macro from GitHub");
         }
         finally
