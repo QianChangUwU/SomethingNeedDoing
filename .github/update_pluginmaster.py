@@ -17,7 +17,7 @@ download_url = f"https://github.com/{repo_full_name}/releases/download/v{version
 entry = next((x for x in data if x.get('InternalName') == 'SomethingNeedDoing'), {})
 
 entry['Name'] = 'Something Need Doing'
-entry['Author'] = 'croizat'
+entry['Author'] = 'croizat, QianChangUwU（魔改）'
 entry['Punchline'] = 'Work work.'
 entry['Description'] = 'Store unlimited macros and create lua scripts.'
 entry['InternalName'] = 'SomethingNeedDoing'
