@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Dalamud.NET.Sdk/15.0.0">
 	<PropertyGroup>
-		<Version>15.13.2.0</Version>
+		<Version>15.13.3.0</Version>
 		<LangVersion>preview</LangVersion>
 		<DefineConstants>$(DefineConstants);AUTOCTOR_EMBED_ATTRIBUTES</DefineConstants>
 
-		<Author>croizat</Author>
+		<Author>croizat, QianChangUwU（魔改）</Author>
 		<Name>SomethingNeedDoing</Name>
 		<InternalName>SomethingNeedDoing</InternalName>
 		<Punchline>Work work.</Punchline>
 		<Description>Store unlimited macros and create lua scripts.</Description>
 		<IconUrl>https://s3.puni.sh/media/plugin/34/icon-z405dwrdjem.png</IconUrl>
-		<RepoUrl>https://github.com/Jaksuhn/SomethingNeedDoing</RepoUrl>
-		<Tags>crafting;automation;lua;macros;scripting</Tags>
+		<RepoUrl>https://github.com/QianChangUwU/SomethingNeedDoing</RepoUrl>
+		<Tags>crafting;automation;lua;macros;scripting;SND</Tags>
 		<CanUnloadAsync>true</CanUnloadAsync>
 	</PropertyGroup>
 
