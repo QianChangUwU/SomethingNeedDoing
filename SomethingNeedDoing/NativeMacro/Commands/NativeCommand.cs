@@ -1,4 +1,4 @@
-﻿using ECommons.Automation;
+using ECommons.Automation;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -10,7 +10,7 @@ public class NativeCommand(string text) : MacroCommandBase(text)
 
     public override async Task Execute(MacroContext context, CancellationToken token)
     {
-        Chat.SendMessage(CommandText.StartsWith('/') ? CommandText : $"/e {CommandText}");
+        Chat.SendMessage(CommandText.StartsWith('/') ? CommandText : $"/e [{P.Prefix}] {CommandText}");
         await PerformWait(token);
     }
 }

@@ -1,4 +1,4 @@
-﻿using NLua;
+using NLua;
 using SomethingNeedDoing.Core.Events;
 using SomethingNeedDoing.LuaMacro;
 using System.Reflection;
@@ -57,7 +57,11 @@ public static class LuaExtensions
         => lua.RegisterFunction("InternalGetMacroText", typeof(LuaExtensions).GetMethod(nameof(InternalGetMacroText), BindingFlags.NonPublic | BindingFlags.Static));
 
     private static void PrintFunction(params object[] args)
-        => Svc.Log.Information($"{(args.Length == 0 ? string.Empty : string.Join("\t", args))}");
+    {
+        var text = args.Length == 0 ? string.Empty : string.Join("\t", args);
+        Svc.Log.Information($"{text}");
+        Svc.Chat.PrintMessage(text);
+    }
 
     private static string? InternalGetMacroText(string macroName)
         => C.GetMacroByName(macroName)?.ContentSansMetadata();
