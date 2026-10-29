@@ -172,6 +172,11 @@ public class ConfigModule(IMacro macro) : LuaModuleBase
                     if (configItem.IsChoice)
                     {
                         var choice = value?.ToString() ?? string.Empty;
+
+                        // 动态选项由 IPC 提供，本地没有候选表时不做限定
+                        if (configItem.HasDynamicChoices || configItem.Choices.Count == 0)
+                            return choice;
+
                         return configItem.Choices.Contains(choice) ? choice : configItem.Choices.FirstOrDefault() ?? string.Empty;
                     }
                     else

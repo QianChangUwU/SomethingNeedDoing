@@ -73,10 +73,29 @@ public class MacroConfigItem : IEquatable<MacroConfigItem>
     public List<string> Choices { get; set; } = [];
 
     /// <summary>
-    /// Gets or sets whether this is a choice list (select from predefined options) or a dynamic list (add/remove items).
+    /// Gets or sets whether this is a choice list (select from predefined options) or a dynamic list (add/add items).
     /// Only applies when Type is "list". Defaults to false (dynamic list).
     /// </summary>
     public bool IsChoice { get; set; } = false;
+
+    /// <summary>
+    /// Gets or sets the IPC functions used to populate choices at runtime.
+    /// Two names are expected: one returning the option count, one returning the option at an index.
+    /// When set, it takes precedence over <see cref="Choices"/>.
+    /// </summary>
+    public string? ChoicesCountIpc { get; set; }
+
+    /// <summary>
+    /// Gets or sets the IPC function returning the option at a given index.
+    /// </summary>
+    public string? ChoicesItemIpc { get; set; }
+
+    /// <summary>
+    /// Gets whether the choices should be resolved from IPC at runtime.
+    /// </summary>
+    [System.Text.Json.Serialization.JsonIgnore]
+    [Newtonsoft.Json.JsonIgnore]
+    public bool HasDynamicChoices => !string.IsNullOrWhiteSpace(ChoicesCountIpc) && !string.IsNullOrWhiteSpace(ChoicesItemIpc);
 
     public bool IsValueDefault()
     {

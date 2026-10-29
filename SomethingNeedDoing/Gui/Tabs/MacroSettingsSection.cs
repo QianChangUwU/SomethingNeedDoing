@@ -172,7 +172,7 @@ public partial class MacroSettingsSection
                 if (configValue.IsChoice)
                 {
                     var currentChoice = configValue.Value?.ToString() ?? "";
-                    var choices = configValue.Choices.ToArray();
+                    var choices = DynamicChoices.Resolve(configValue);
 
                     if (choices.Length > 0)
                     {
@@ -229,7 +229,7 @@ public partial class MacroSettingsSection
                 if (configValue.IsChoice)
                 {
                     var currentChoice = configValue.Value?.ToString() ?? "";
-                    var choices = configValue.Choices.ToArray();
+                    var choices = DynamicChoices.Resolve(configValue);
 
                     if (choices.Length > 0)
                     {

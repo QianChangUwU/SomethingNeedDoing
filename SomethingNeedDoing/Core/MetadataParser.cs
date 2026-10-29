@@ -381,6 +381,12 @@ public partial class MetadataParser
 
                 if (configData.TryGetValue("is_choice", out var isChoiceList))
                     configItem.IsChoice = isChoiceList?.ToString()?.ToLower() == "true";
+
+                if (configData.TryGetValue("choices_count_ipc", out var countIpc))
+                    configItem.ChoicesCountIpc = countIpc?.ToString();
+
+                if (configData.TryGetValue("choices_item_ipc", out var itemIpc))
+                    configItem.ChoicesItemIpc = itemIpc?.ToString();
             }
             else
             {
@@ -407,7 +413,11 @@ public partial class MetadataParser
             else if (configItem.IsChoice && configItem.Type == typeof(string))
             {
                 var defaultValue = configItem.DefaultValue?.ToString() ?? string.Empty;
-                if (configItem.Choices.Contains(defaultValue))
+
+                if (configItem.HasDynamicChoices)
+                    // 选项在运行时由 IPC 提供，这里不能把值清空
+                    configItem.Value = defaultValue;
+                else if (configItem.Choices.Contains(defaultValue))
                     configItem.Value = defaultValue;
                 else
                     configItem.Value = configItem.Choices.Any() ? configItem.Choices.First() : string.Empty;
